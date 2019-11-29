@@ -1,0 +1,186 @@
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: 2019-11-11T15:38:12Z
+  labels:
+    kops.k8s.io/cluster: tb-performance.k8s.local
+  name: cassandra
+spec:
+  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  machineType: c5d.xlarge
+  maxSize: 20
+  minSize: 20
+  nodeLabels:
+    kops.k8s.io/instancegroup: cassandra
+    nodeType: cassandra
+  role: Node
+  subnets:
+  - us-east-1a
+
+---
+
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: 2019-11-11T16:04:46Z
+  labels:
+    kops.k8s.io/cluster: tb-performance.k8s.local
+  name: js-executor
+spec:
+  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  machineType: c5.large
+  maxSize: 3
+  minSize: 3
+  nodeLabels:
+    kops.k8s.io/instancegroup: js-executor
+    nodeType: js-executor
+  role: Node
+  subnets:
+  - us-east-1a
+
+---
+
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: 2019-11-11T15:15:31Z
+  labels:
+    kops.k8s.io/cluster: tb-performance.k8s.local
+  name: master-us-east-1a
+spec:
+  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  machineType: m5.large
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: master-us-east-1a
+  role: Master
+  subnets:
+  - us-east-1a
+
+---
+
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: 2019-11-11T15:58:40Z
+  labels:
+    kops.k8s.io/cluster: tb-performance.k8s.local
+  name: mqtt-transport
+spec:
+  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  machineType: c5.large
+  maxSize: 2
+  minSize: 2
+  nodeLabels:
+    kops.k8s.io/instancegroup: mqtt-transport
+    nodeType: mqtt-transport
+  role: Node
+  subnets:
+  - us-east-1a
+
+---
+
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: 2019-11-11T15:39:04Z
+  labels:
+    kops.k8s.io/cluster: tb-performance.k8s.local
+  name: postgres
+spec:
+  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  machineType: i3.2xlarge
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: postgres
+    nodeType: postgres
+  role: Node
+  subnets:
+  - us-east-1a
+
+---
+
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: 2019-11-11T15:35:45Z
+  labels:
+    kops.k8s.io/cluster: tb-performance.k8s.local
+  name: tb-node
+spec:
+  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  machineType: c5.xlarge
+  maxSize: 15
+  minSize: 15
+  nodeLabels:
+    kops.k8s.io/instancegroup: tb-node
+    nodeType: tb-node
+  role: Node
+  subnets:
+  - us-east-1a
+
+---
+
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: 2019-11-11T15:35:45Z
+  labels:
+    kops.k8s.io/cluster: tb-performance.k8s.local
+  name: tb-performance
+spec:
+  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  machineType: c5.large
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: tb-performance
+    nodeType: tb-performance
+  role: Node
+  subnets:
+  - us-east-1a
+
+---
+
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: 2019-11-11T15:31:52Z
+  labels:
+    kops.k8s.io/cluster: tb-performance.k8s.local
+  name: tb-kafka
+spec:
+  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  machineType: c5.2xlarge
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: tb-kafka
+    nodeType: tb-kafka
+  role: Node
+  subnets:
+  - us-east-1a
+
+---
+
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: 2019-11-11T15:31:52Z
+  labels:
+    kops.k8s.io/cluster: tb-performance.k8s.local
+  name: thirdparty
+spec:
+  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  machineType: c5.xlarge
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: thirdparty
+    nodeType: thirdparty
+  role: Node
+  subnets:
+  - us-east-1a
+

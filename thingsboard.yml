@@ -1,0 +1,483 @@
+#
+# ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
+#
+# Copyright © 2016-2019 ThingsBoard, Inc. All Rights Reserved.
+#
+# NOTICE: All information contained herein is, and remains
+# the property of ThingsBoard, Inc. and its suppliers,
+# if any.  The intellectual and technical concepts contained
+# herein are proprietary to ThingsBoard, Inc.
+# and its suppliers and may be covered by U.S. and Foreign Patents,
+# patents in process, and are protected by trade secret or copyright law.
+#
+# Dissemination of this information or reproduction of this material is strictly forbidden
+# unless prior written permission is obtained from COMPANY.
+#
+# Access to the source code contained herein is hereby forbidden to anyone except current COMPANY employees,
+# managers or contractors who have executed Confidentiality and Non-disclosure agreements
+# explicitly covering such access.
+#
+# The copyright notice above does not evidence any actual or intended publication
+# or disclosure  of  this source code, which includes
+# information that is confidential and/or proprietary, and is a trade secret, of  COMPANY.
+# ANY REPRODUCTION, MODIFICATION, DISTRIBUTION, PUBLIC  PERFORMANCE,
+# OR PUBLIC DISPLAY OF OR THROUGH USE  OF THIS  SOURCE CODE  WITHOUT
+# THE EXPRESS WRITTEN CONSENT OF COMPANY IS STRICTLY PROHIBITED,
+# AND IN VIOLATION OF APPLICABLE LAWS AND INTERNATIONAL TREATIES.
+# THE RECEIPT OR POSSESSION OF THIS SOURCE CODE AND/OR RELATED INFORMATION
+# DOES NOT CONVEY OR IMPLY ANY RIGHTS TO REPRODUCE, DISCLOSE OR DISTRIBUTE ITS CONTENTS,
+# OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
+#
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: zookeeper
+  namespace: thingsboard
+spec:
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      nodeSelector:
+        nodeType: thirdparty
+      containers:
+      - name: server
+        imagePullPolicy: Always
+        image: zookeeper:3.5.6
+        ports:
+        - containerPort: 2181
+        readinessProbe:
+          periodSeconds: 5
+          tcpSocket:
+            port: 2181
+        livenessProbe:
+          periodSeconds: 5
+          tcpSocket:
+            port: 2181
+        env:
+        - name: ZOO_MY_ID
+          value: "1"
+        - name: ZOO_SERVERS
+          value: "server.1=0.0.0.0:2888:3888;0.0.0.0:2181"
+        - name: ZOO_MAX_CLIENT_CNXNS
+          value: "200"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zookeeper
+  namespace: thingsboard
+spec:
+  type: ClusterIP
+  selector:
+    app: zookeeper
+  ports:
+  - name: zk-port
+    port: 2181
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tb-kafka
+  namespace: thingsboard
+spec:
+  template:
+    metadata:
+      labels:
+        app: tb-kafka
+    spec:
+      nodeSelector:
+        nodeType: tb-kafka
+      containers:
+      - name: server
+        imagePullPolicy: Always
+        image: wurstmeister/kafka:2.12-2.2.1
+        ports:
+        - containerPort: 9092
+        readinessProbe:
+          periodSeconds: 20
+          tcpSocket:
+            port: 9092
+        resources:
+          requests:
+            cpu: "2000m"
+            memory: 6Gi
+        livenessProbe:
+          periodSeconds: 5
+          tcpSocket:
+            port: 9092
+        env:
+        - name: KAFKA_ZOOKEEPER_CONNECT
+          value: "zookeeper:2181"
+        - name: KAFKA_LISTENERS
+          value: "INSIDE://:9093,OUTSIDE://:9092"
+        - name: KAFKA_ADVERTISED_LISTENERS
+          value: "INSIDE://:9093,OUTSIDE://tb-kafka:9092"
+        - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+          value: "INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT"
+        - name: KAFKA_INTER_BROKER_LISTENER_NAME
+          value: "INSIDE"
+        - name: KAFKA_CREATE_TOPICS
+          value: "js.eval.requests:120:1:delete --config=retention.ms=60000 --config=segment.bytes=26214400 --config=retention.bytes=104857600,tb.transport.api.requests:30:1:delete --config=retention.ms=60000 --config=segment.bytes=26214400 --config=retention.bytes=104857600,tb.rule-engine:30:1:delete --config=retention.ms=60000 --config=segment.bytes=26214400 --config=retention.bytes=104857600"
+        - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
+          value: "false"
+        - name: KAFKA_LOG_RETENTION_BYTES
+          value: "1073741824"
+        - name: KAFKA_LOG_SEGMENT_BYTES
+          value: "268435456"
+        - name: KAFKA_LOG_RETENTION_MS
+          value: "300000"
+        - name: KAFKA_LOG_CLEANUP_POLICY
+          value: "delete"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tb-kafka
+  namespace: thingsboard
+spec:
+  type: ClusterIP
+  selector:
+    app: tb-kafka
+  ports:
+  - name: tb-kafka-port
+    port: 9092
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tb-redis
+  namespace: thingsboard
+spec:
+  template:
+    metadata:
+      labels:
+        app: tb-redis
+    spec:
+      nodeSelector:
+        nodeType: thirdparty
+      containers:
+      - name: server
+        imagePullPolicy: Always
+        image: redis:4.0
+        ports:
+        - containerPort: 6379
+        readinessProbe:
+          periodSeconds: 5
+          tcpSocket:
+            port: 6379
+        livenessProbe:
+          periodSeconds: 5
+          tcpSocket:
+            port: 6379
+        resources:
+          requests:
+            cpu: "2000m"
+            memory: 6Gi
+        volumeMounts:
+        - mountPath: /data
+          name: redis-data
+      volumes:
+      - name: redis-data
+        emptyDir: {}
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tb-redis
+  namespace: thingsboard
+spec:
+  type: ClusterIP
+  selector:
+    app: tb-redis
+  ports:
+  - name: tb-redis-port
+    port: 6379
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tb-js-executor
+  namespace: thingsboard
+spec:
+  replicas: 120
+  selector:
+    matchLabels:
+      app: tb-js-executor
+  template:
+    metadata:
+      labels:
+        app: tb-js-executor
+    spec:
+      nodeSelector:
+        nodeType: js-executor
+      imagePullSecrets:
+        - name: regcred
+      containers:
+      - name: server
+        imagePullPolicy: Always
+        image: thingsboard/tb-pe-js-executor:latest
+        env:
+        - name: REMOTE_JS_EVAL_REQUEST_TOPIC
+          value: "js.eval.requests"
+        - name: TB_KAFKA_SERVERS
+          value: "tb-kafka:9092"
+        - name: LOGGER_LEVEL
+          value: "info"
+        - name: LOG_FOLDER
+          value: "logs"
+        - name: LOGGER_FILENAME
+          value: "tb-js-executor-%DATE%.log"
+        - name: DOCKER_MODE
+          value: "true"
+        - name: SCRIPT_BODY_TRACE_FREQUENCY
+          value: "1000"
+      restartPolicy: Always
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tb-node
+  namespace: thingsboard
+spec:
+  replicas: 30
+  selector:
+    matchLabels:
+      app: tb-node
+  template:
+    metadata:
+      labels:
+        app: tb-node
+    spec:
+      nodeSelector:
+        nodeType: tb-node
+      volumes:
+        - name: tb-node-config
+          configMap:
+            name: tb-node-config
+            items:
+            - key: conf
+              path:  thingsboard.conf
+            - key: logback
+              path:  logback.xml
+      imagePullSecrets:
+        - name: regcred
+      containers:
+      - name: server
+        imagePullPolicy: Always
+        image: thingsboard/tb-pe-node:latest
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9001
+          name: rpc
+        env:
+        - name: RPC_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: CLUSTER_NODE_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: TB_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: ZOOKEEPER_ENABLED
+          value: "true"
+        - name: ZOOKEEPER_URL
+          value: "zookeeper:2181"
+        - name: ZOOKEEPER_SESSION_TIMEOUT_MS
+          value: "30000"
+        - name: ZOOKEEPER_CONNECTION_TIMEOUT_MS
+          value: "30000"
+        - name: TB_KAFKA_SERVERS
+          value: "tb-kafka:9092"
+        - name: JS_EVALUATOR
+          value: "remote"
+        - name: TRANSPORT_TYPE
+          value: "remote"
+        - name: CACHE_TYPE
+          value: "redis"
+        - name: REDIS_HOST
+          value: "tb-redis"
+        - name: HTTP_LOG_CONTROLLER_ERROR_STACK_TRACE
+          value: "false"
+        - name: SPRING_DATASOURCE_MAXIMUM_POOL_SIZE
+          value: "6"
+        - name: PERSIST_STATE_TO_TELEMETRY
+          value: "true"
+        - name: DEFAULT_STATE_CHECK_INTERVAL
+          value: "60"
+        - name: DEFAULT_INACTIVITY_TIMEOUT
+          value: "300"
+        - name: CASSANDRA_QUERY_BUFFER_SIZE
+          value: "1000000"
+        - name: TB_TRANSPORT_SESSIONS_INACTIVITY_TIMEOUT
+          value: "86400000"
+        - name: CLUSTER_VIRTUAL_NODES_SIZE
+          value: "4096"
+        - name: TB_RULE_ENGINE_STATS_ENABLED
+          value: "true"
+        - name: TB_RULE_ENGINE_STATS_PRINT_INTERVAL_MS
+          value: "10000"
+        - name: TB_CLUSTER_STATS_ENABLED
+          value: "true"
+        - name: TB_CLUSTER_STATS_PRINT_INTERVAL_MS
+          value: "10000"
+        - name: CASSANDRA_QUERY_PRINT_FREQ
+          value: "10000"
+        - name: TS_KV_PARTITIONING
+          value: "INDEFINITE"
+        - name: ACTORS_RULE_JS_THREAD_POOL_SIZE
+          value: "50"
+        - name: TB_JS_REMOTE_STATS_ENABLED
+          value: "true"
+        - name: TB_JS_REMOTE_STATS_PRINT_INTERVAL_MS
+          value: "1000"
+        - name: ACTORS_JS_STATISTICS_PRINT_INTERVAL_MS
+          value: "1000"
+        envFrom:
+        - configMapRef:
+            name: tb-node-db-config
+        volumeMounts:
+          - mountPath: /config
+            name: tb-node-config
+        resources:
+          requests:
+            cpu: "1500m"
+            memory: 1500M
+        livenessProbe:
+          httpGet:
+            path: /login
+            port: http
+          initialDelaySeconds: 120
+          timeoutSeconds: 10
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tb-node
+  namespace: thingsboard
+spec:
+  type: ClusterIP
+  selector:
+    app: tb-node
+  ports:
+  - port: 8080
+    name: http
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tb-mqtt-transport
+  namespace: thingsboard
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tb-mqtt-transport
+  template:
+    metadata:
+      labels:
+        app: tb-mqtt-transport
+    spec:
+      nodeSelector:
+        nodeType: mqtt-transport
+      volumes:
+        - name: tb-mqtt-transport-config
+          configMap:
+            name: tb-mqtt-transport-config
+            items:
+            - key: conf
+              path:  tb-mqtt-transport.conf
+            - key: logback
+              path:  logback.xml
+      imagePullSecrets:
+        - name: regcred
+      containers:
+      - name: server
+        imagePullPolicy: Always
+        image: thingsboard/tb-pe-mqtt-transport:latest
+        ports:
+        - containerPort: 1883
+          name: mqtt
+        env:
+        - name: CLUSTER_NODE_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: TB_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: MQTT_BIND_ADDRESS
+          value: "0.0.0.0"
+        - name: MQTT_BIND_PORT
+          value: "1883"
+        - name: MQTT_TIMEOUT
+          value: "10000"
+        - name: TB_KAFKA_SERVERS
+          value: "tb-kafka:9092"
+        - name: TB_TRANSPORT_MAX_PENDING_REQUESTS
+          value: "1000000"
+        - name: TB_TRANSPORT_MAX_REQUEST_TIMEOUT
+          value: "60000"
+        - name: TB_TRANSPORT_SESSIONS_INACTIVITY_TIMEOUT
+          value: "86400000"
+        volumeMounts:
+          - mountPath: /config
+            name: tb-mqtt-transport-config
+        readinessProbe:
+          periodSeconds: 20
+          tcpSocket:
+            port: 1883
+        resources:
+          requests:
+            cpu: "1500m"
+            memory: 1500M
+        livenessProbe:
+          periodSeconds: 20
+          tcpSocket:
+            port: 1883
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tb-mqtt-transport
+  namespace: thingsboard
+spec:
+  type: ClusterIP
+  selector:
+    app: tb-mqtt-transport
+  ports:
+  - port: 1883
+    name: mqtt
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tb-ingress
+  namespace: thingsboard
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    ingress.kubernetes.io/use-regex: "true"
+    ingress.kubernetes.io/ssl-redirect: "false"
+    ingress.kubernetes.io/proxy-read-timeout: "3600"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: tb-node
+          servicePort: 8080
+---
