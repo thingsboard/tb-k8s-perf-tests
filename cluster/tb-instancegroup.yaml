@@ -28,7 +28,7 @@ metadata:
   name: js-executor
 spec:
   image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
-  machineType: c5.large
+  machineType: c5.2xlarge
   maxSize: 3
   minSize: 3
   nodeLabels:

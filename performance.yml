@@ -32,7 +32,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: tb-performance-1
+  name: tb-performance-run
   namespace: thingsboard
 spec:
   nodeSelector:
@@ -47,9 +47,9 @@ spec:
     - name: TEST_ENABLED
       value: "true"
     - name: MESSAGES_PER_SECOND
-      value: "10000"
+      value: "20000"
     - name: DURATION_IN_SECONDS
-      value: "120"
+      value: "14400"
     - name: DEVICE_START_IDX
       value: "0"
     - name: DEVICE_END_IDX
@@ -66,6 +66,14 @@ spec:
       value: "false"
     - name: GATEWAY_DELETE_ON_COMPLETE
       value: "false"
+    - name: ALARM_STORM_START_SECOND
+      value: "20"
+    - name: ALARM_STORM_END_SECOND
+      value: "30"
+    - name: ALARMS_PER_SECOND
+      value: "200"
+    - name: WARMUP_ENABLED
+      value: "true"
     envFrom:
     - configMapRef:
         name: tb-performance-config

@@ -112,6 +112,10 @@ spec:
         env:
         - name: KAFKA_ZOOKEEPER_CONNECT
           value: "zookeeper:2181"
+        - name: KAFKA_ADVERTISED_HOST_NAME
+          value: "tb-kafka"
+        - name: KAFKA_ADVERTISED_PORT
+          value: "9092"
         - name: KAFKA_LISTENERS
           value: "INSIDE://:9093,OUTSIDE://:9092"
         - name: KAFKA_ADVERTISED_LISTENERS
@@ -205,7 +209,7 @@ metadata:
   name: tb-js-executor
   namespace: thingsboard
 spec:
-  replicas: 120
+  replicas: 30
   selector:
     matchLabels:
       app: tb-js-executor
@@ -237,6 +241,8 @@ spec:
           value: "true"
         - name: SCRIPT_BODY_TRACE_FREQUENCY
           value: "1000"
+        - name: SCRIPT_USE_SANDBOX
+          value: "false"
       restartPolicy: Always
 ---
 apiVersion: extensions/v1beta1
@@ -245,7 +251,7 @@ metadata:
   name: tb-node
   namespace: thingsboard
 spec:
-  replicas: 30
+  replicas: 15
   selector:
     matchLabels:
       app: tb-node
@@ -310,7 +316,7 @@ spec:
         - name: HTTP_LOG_CONTROLLER_ERROR_STACK_TRACE
           value: "false"
         - name: SPRING_DATASOURCE_MAXIMUM_POOL_SIZE
-          value: "6"
+          value: "10"
         - name: PERSIST_STATE_TO_TELEMETRY
           value: "true"
         - name: DEFAULT_STATE_CHECK_INTERVAL
@@ -333,6 +339,8 @@ spec:
           value: "10000"
         - name: CASSANDRA_QUERY_PRINT_FREQ
           value: "10000"
+        - name: SQL_ATTRIBUTES_BATCH_STATS_PRINT_MS
+          value: "1000"
         - name: TS_KV_PARTITIONING
           value: "INDEFINITE"
         - name: ACTORS_RULE_JS_THREAD_POOL_SIZE

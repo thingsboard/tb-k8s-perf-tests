@@ -36,8 +36,8 @@ set -e
 
 function printKafkaJsInvokeStats() {
 
-    echo '                                                                    PUSHED,RECEIVED,DIFF'
-    grep 'Kafka JS Invoke Stats' tb-node-logs/* | awk '{gsub ( /[\[\]]/, "" ); print $1 "," $12 "," $14}' | awk -F ',' '{pushed[$1] += $2; received[$1] += $3;} END{for (i in pushed) {print i,","pushed[i]","received[i]","pushed[i]-received[i]}}' | sort -t, -k4 -r -n
+    echo '                                                                    PUSHED,RECEIVED,DIFF,TIMEDOUT'
+    grep 'Kafka JS Invoke Stats' tb-node-logs/* | awk '{gsub ( /[\[\]]/, "" ); print $1 "," $12 "," $14 "," $22}' | awk -F ',' '{pushed[$1] += $2; received[$1] += $3; timedOut[$1] += $4;} END{for (i in pushed) {print i,","pushed[i]","received[i]","pushed[i]-received[i]","timedOut[i]}}' | sort -t, -k4 -r -n
 
 }
 
