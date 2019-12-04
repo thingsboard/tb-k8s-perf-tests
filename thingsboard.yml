@@ -479,11 +479,12 @@ metadata:
   name: tb-mqtt-transport
   namespace: thingsboard
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: tb-mqtt-transport
   ports:
   - port: 1883
+    targetPort: 1883
     name: mqtt
 ---
 apiVersion: extensions/v1beta1
