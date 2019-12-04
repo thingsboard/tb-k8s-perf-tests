@@ -31,12 +31,6 @@ $ ./k8s-deploy-metrics.sh
 
 ## ThingsBoard Microservices Installation
 
-Execute the following command to upload docker credentials for pulling private images:
-
-`
-$ ./k8s-upload-docker-credentials.sh
-`
-
 Execute the following command to run installation:
 
 `
@@ -62,10 +56,16 @@ $ ./k8s-install-performance.sh
 `
 
 
-Execute the following command to start performance test:
+Execute the following command to start performance test for first 50000 Gateways:
 
 `
 $ ./k8s-run-performance.sh
+`
+
+Execute the following command to start performance test for the next 50000 Gateways:
+
+`
+$ ./k8s-run-performance2.sh
 `
 
 After a while when all resources will be successfully started you can open `http://{your-cluster-ip}` in you browser (for ex. `http://192.168.99.101`).
@@ -81,12 +81,6 @@ OR:
 
 `
 $ kubectl get ingress.extensions
-`
-
-Execute the following command to get your cluster mqtt host information:
-
-`
-$ kubectl get service tb-mqtt-transport
 `
 
 Use the following default credentials:
