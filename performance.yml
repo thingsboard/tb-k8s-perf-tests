@@ -53,11 +53,11 @@ spec:
     - name: DEVICE_START_IDX
       value: "0"
     - name: DEVICE_END_IDX
-      value: "1000000"
+      value: "500000"
     - name: GATEWAY_START_IDX
       value: "0"
     - name: GATEWAY_END_IDX
-      value: "1000"
+      value: "50000"
     - name: DEVICE_CREATE_ON_START
       value: "false"
     - name: DEVICE_DELETE_ON_COMPLETE

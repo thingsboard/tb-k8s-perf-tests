@@ -56,7 +56,7 @@ spec:
           value: "thingsboard"
         - name: PGDATA
           value: /var/lib/postgresql/data/pgdata
-        args: ['-c', 'max_connections=200']
+        args: ['-c', 'max_connections=200', '-c', 'max_wal_size=2GB', '-c', 'shared_buffers=2GB', '-c', 'effective_cache_size=4GB', '-c', 'work_mem=8MB', '-c', 'fsync=off']
         livenessProbe:
           exec:
             command:

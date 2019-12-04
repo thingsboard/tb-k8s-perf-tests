@@ -30,39 +30,12 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
-function installPerformance() {
-
-    deviceStartIdx=$1
-    deviceEndIdx=$2
-    gatewayStartIdx=$3
-    gatewayEndIdx=$4
-
-    kubectl apply -f tb-performance-configmap.yml
-    kubectl apply -f performance-setup.yml &&
-    kubectl wait --for=condition=Ready pod/tb-performance-setup --timeout=600s &&
-    kubectl exec tb-performance-setup -- sh -c 'export TEST_ENABLED=false; \
-export DEVICE_CREATE_ON_START=true; \
-export DEVICE_DELETE_ON_COMPLETE=false; \
-export GATEWAY_CREATE_ON_START=true; \
-export GATEWAY_DELETE_ON_COMPLETE=false; \
-export DEVICE_START_IDX='$deviceStartIdx'; \
-export DEVICE_END_IDX='$deviceEndIdx'; \
-export GATEWAY_START_IDX='$gatewayStartIdx'; \
-export GATEWAY_END_IDX='$gatewayEndIdx'; \
-start-tests.sh; touch /install-finished;'
-
-    kubectl delete pod tb-performance-setup
-
-}
-
-deviceStartIdx=${1:-0}
-deviceEndIdx=${2:-1000000}
-gatewayStartIdx=${3:-0}
-gatewayEndIdx=${4:-100000}
-
 source .env
 
 kubectl apply -f tb-namespace.yml
 kubectl config set-context $(kubectl config current-context) --namespace=thingsboard
-
-installPerformance ${deviceStartIdx} ${deviceEndIdx} ${gatewayStartIdx} ${gatewayEndIdx}
+kubectl apply -f tb-performance-configmap.yml
+kubectl apply -f performance2.yml
+kubectl wait --for=condition=Ready pod/tb-performance-run2 --timeout=600s &&
+kubectl logs -f tb-performance-run2
+#    kubectl delete pod tb-performance-run2

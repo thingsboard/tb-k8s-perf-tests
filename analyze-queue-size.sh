@@ -40,7 +40,7 @@ function printQueueInfo() {
     sortField=$4
 
     echo '                                                                    SUM,COUNT,AVG,MAX,CURRENT'
-    grep "${grepField}" tb-node-logs/* | awk '{gsub ( /[\[\]]/, "" ); print $1 " " $'${firstField}' "," $'${secondField}'}' | awk -F ',' '{current[$1]=$2; a[$1] += $2; if(length(count[$1]) == 0) {count[$1]=0}; if($2>0) {count[$1]++}; if ($2>max[$1] || length(max[$1]) == 0) max[$1]=$2;} END{for (i in a) {avg[i]=0; if(count[i]>0) avg[i]=a[i]/count[i]; print i,","a[i]","count[i]","avg[i]","max[i]","current[i]}}' | sort -t, -k${sortField} -r -n
+    grep "${grepField}" tb-node-logs/* | awk '{gsub ( /[\[\]]/, "" ); print $1  " " $'${firstField}' "," $'${secondField}' "," $2}' | awk -F ',' '{current[$1]=$2; a[$1] += $2; if(length(count[$1]) == 0) {count[$1]=0}; if($2>0) {count[$1]++}; if ($2>max[$1] || length(max[$1]) == 0) max[$1]=$2; t[$1]=$3} END{for (i in a) {avg[i]=0; if(count[i]>0) avg[i]=a[i]/count[i]; print i" "t[i],","a[i]","count[i]","avg[i]","max[i]","current[i]}}' | sort -t, -k${sortField} -r -n
 
 }
 

@@ -136,6 +136,10 @@ spec:
           value: "300000"
         - name: KAFKA_LOG_CLEANUP_POLICY
           value: "delete"
+      initContainers:
+      - name: wait-for-zookeeper
+        image: busybox:1.28
+        command: ['sh', '-c', 'echo "Waiting for zookeeper to launch..."; until nc -w 1 -z zookeeper 2181; do echo "Waiting for zookeeper"; sleep 1; done; echo "Zookeeper launched";']
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -243,6 +247,10 @@ spec:
           value: "1000"
         - name: SCRIPT_USE_SANDBOX
           value: "false"
+      initContainers:
+      - name: wait-for-kafka
+        image: busybox:1.28
+        command: ['sh', '-c', 'echo "Waiting for kafka to launch..."; until nc -w 1 -z tb-kafka 9092; do echo "Waiting for kafka"; sleep 1; done; echo "Kafka launched";']
       restartPolicy: Always
 ---
 apiVersion: extensions/v1beta1
@@ -367,6 +375,10 @@ spec:
             port: http
           initialDelaySeconds: 120
           timeoutSeconds: 10
+      initContainers:
+      - name: wait-for-kafka
+        image: busybox:1.28
+        command: ['sh', '-c', 'echo "Waiting for kafka to launch..."; until nc -w 1 -z tb-kafka 9092; do echo "Waiting for kafka"; sleep 1; done; echo "Kafka launched";']
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -455,6 +467,10 @@ spec:
           periodSeconds: 20
           tcpSocket:
             port: 1883
+      initContainers:
+      - name: wait-for-kafka
+        image: busybox:1.28
+        command: ['sh', '-c', 'echo "Waiting for kafka to launch..."; until nc -w 1 -z tb-kafka 9092; do echo "Waiting for kafka"; sleep 1; done; echo "Kafka launched";']
       restartPolicy: Always
 ---
 apiVersion: v1

@@ -147,6 +147,27 @@ spec:
 apiVersion: kops/v1alpha2
 kind: InstanceGroup
 metadata:
+  creationTimestamp: 2019-11-11T15:35:45Z
+  labels:
+    kops.k8s.io/cluster: tb-performance.k8s.local
+  name: tb-performance2
+spec:
+  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  machineType: c5.large
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: tb-performance
+    nodeType: tb-performance-2
+  role: Node
+  subnets:
+  - us-east-1a
+
+---
+
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
   creationTimestamp: 2019-11-11T15:31:52Z
   labels:
     kops.k8s.io/cluster: tb-performance.k8s.local
