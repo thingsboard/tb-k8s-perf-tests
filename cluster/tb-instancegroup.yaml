@@ -1,4 +1,4 @@
-apiVersion: kops/v1alpha2
+apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
   creationTimestamp: 2019-11-11T15:38:12Z
@@ -6,7 +6,7 @@ metadata:
     kops.k8s.io/cluster: tb-performance.k8s.local
   name: cassandra
 spec:
-  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5d.xlarge
   maxSize: 20
   minSize: 20
@@ -19,7 +19,7 @@ spec:
 
 ---
 
-apiVersion: kops/v1alpha2
+apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
   creationTimestamp: 2019-11-11T16:04:46Z
@@ -27,7 +27,7 @@ metadata:
     kops.k8s.io/cluster: tb-performance.k8s.local
   name: js-executor
 spec:
-  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.2xlarge
   maxSize: 3
   minSize: 3
@@ -40,7 +40,7 @@ spec:
 
 ---
 
-apiVersion: kops/v1alpha2
+apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
   creationTimestamp: 2019-11-11T15:15:31Z
@@ -48,7 +48,7 @@ metadata:
     kops.k8s.io/cluster: tb-performance.k8s.local
   name: master-us-east-1a
 spec:
-  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: m5.large
   maxSize: 1
   minSize: 1
@@ -60,7 +60,7 @@ spec:
 
 ---
 
-apiVersion: kops/v1alpha2
+apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
   creationTimestamp: 2019-11-11T15:58:40Z
@@ -68,7 +68,7 @@ metadata:
     kops.k8s.io/cluster: tb-performance.k8s.local
   name: mqtt-transport
 spec:
-  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.large
   maxSize: 2
   minSize: 2
@@ -81,7 +81,7 @@ spec:
 
 ---
 
-apiVersion: kops/v1alpha2
+apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
   creationTimestamp: 2019-11-11T15:39:04Z
@@ -89,7 +89,7 @@ metadata:
     kops.k8s.io/cluster: tb-performance.k8s.local
   name: postgres
 spec:
-  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: i3.2xlarge
   maxSize: 1
   minSize: 1
@@ -102,7 +102,7 @@ spec:
 
 ---
 
-apiVersion: kops/v1alpha2
+apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
   creationTimestamp: 2019-11-11T15:35:45Z
@@ -110,7 +110,7 @@ metadata:
     kops.k8s.io/cluster: tb-performance.k8s.local
   name: tb-node
 spec:
-  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.xlarge
   maxSize: 15
   minSize: 15
@@ -123,7 +123,7 @@ spec:
 
 ---
 
-apiVersion: kops/v1alpha2
+apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
   creationTimestamp: 2019-11-11T15:35:45Z
@@ -131,7 +131,7 @@ metadata:
     kops.k8s.io/cluster: tb-performance.k8s.local
   name: tb-performance
 spec:
-  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.large
   maxSize: 1
   minSize: 1
@@ -144,7 +144,7 @@ spec:
 
 ---
 
-apiVersion: kops/v1alpha2
+apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
   creationTimestamp: 2019-11-11T15:35:45Z
@@ -152,7 +152,7 @@ metadata:
     kops.k8s.io/cluster: tb-performance.k8s.local
   name: tb-performance2
 spec:
-  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.large
   maxSize: 1
   minSize: 1
@@ -165,7 +165,7 @@ spec:
 
 ---
 
-apiVersion: kops/v1alpha2
+apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
   creationTimestamp: 2019-11-11T15:31:52Z
@@ -173,7 +173,7 @@ metadata:
     kops.k8s.io/cluster: tb-performance.k8s.local
   name: tb-kafka
 spec:
-  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.2xlarge
   maxSize: 1
   minSize: 1
@@ -186,7 +186,7 @@ spec:
 
 ---
 
-apiVersion: kops/v1alpha2
+apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
   creationTimestamp: 2019-11-11T15:31:52Z
@@ -194,7 +194,7 @@ metadata:
     kops.k8s.io/cluster: tb-performance.k8s.local
   name: thirdparty
 spec:
-  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2019-09-26
+  image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.xlarge
   maxSize: 1
   minSize: 1
