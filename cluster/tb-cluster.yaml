@@ -32,6 +32,8 @@ spec:
     anonymousAuth: false
     authenticationTokenWebhook: true
     authorizationMode: Webhook
+    experimentalAllowedUnsafeSysctls:
+    - net.ipv4.tcp_fin_timeout
   kubernetesApiAccess:
   - 0.0.0.0/0
   kubernetesVersion: 1.15.5

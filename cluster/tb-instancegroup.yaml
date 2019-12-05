@@ -131,6 +131,9 @@ metadata:
     kops.k8s.io/cluster: tb-performance.k8s.local
   name: tb-performance
 spec:
+  kubelet:
+    experimentalAllowedUnsafeSysctls:
+    - net.ipv4.tcp_fin_timeout
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.large
   maxSize: 1
@@ -152,6 +155,9 @@ metadata:
     kops.k8s.io/cluster: tb-performance.k8s.local
   name: tb-performance2
 spec:
+  kubelet:
+    experimentalAllowedUnsafeSysctls:
+    - net.ipv4.tcp_fin_timeout
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.large
   maxSize: 1

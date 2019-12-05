@@ -39,6 +39,12 @@ spec:
     nodeType: tb-performance
   imagePullSecrets:
     - name: regcred
+  securityContext:
+    sysctls:
+    - name: net.ipv4.ip_local_port_range
+      value: "10000 61000"
+    - name: net.ipv4.tcp_fin_timeout
+      value: "30"
   containers:
   - name: tb-performance
     imagePullPolicy: Always
