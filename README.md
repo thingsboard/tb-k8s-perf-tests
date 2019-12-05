@@ -9,6 +9,27 @@ You need to have a Kubernetes cluster, and the kubectl command-line tool must be
 Follow [Getting Started with kops on AWS](https://github.com/kubernetes/kops/blob/master/docs/getting_started/aws.md)
 to prepare necessary tools for deploying cluster on AWS using kops.
 
+## Generate ssh key for kops resources
+
+By default ssh key that is located in the *~/.ssh/kops.pub* is going to be used to access kops resources.
+Pleaes execute the following command to create this ssh key (please enter **/home/[YOUR_USER_NAME]/.ssh/kops** file name during key generation procedure):
+
+`
+$ ssh-keygen
+`
+
+Sample:
+
+`
+$ voba@voba-desktop:~/projects/tb-pe-k8s-perf-tests$ ssh-keygen 
+$ Generating public/private rsa key pair.
+$ Enter file in which to save the key (/home/voba/.ssh/id_rsa): /home/voba/.ssh/kops
+$ ...
+`
+
+You can use your custom ssh key, but in that case please update **SSH_PUBLIC_KEY** property in the *.env* file and set it to your custom ssh key.
+
+
 ## Deploy Cluster
 
 Execute the following command to deploy cluster:
