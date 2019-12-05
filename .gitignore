@@ -10,6 +10,7 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 tb-node-logs/
+tb-mqtt-transports-logs/
 dashboard-access.info
 
 # Package Files #
