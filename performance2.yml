@@ -53,7 +53,7 @@ spec:
     - name: TEST_ENABLED
       value: "true"
     - name: MESSAGES_PER_SECOND
-      value: "20000"
+      value: "10000"
     - name: DURATION_IN_SECONDS
       value: "14400"
     - name: DEVICE_START_IDX
