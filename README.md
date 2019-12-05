@@ -19,13 +19,12 @@ $ ssh-keygen
 `
 
 Sample:
-
-`
+```
 $ voba@voba-desktop:~/projects/tb-pe-k8s-perf-tests$ ssh-keygen 
 $ Generating public/private rsa key pair.
 $ Enter file in which to save the key (/home/voba/.ssh/id_rsa): /home/voba/.ssh/kops
 $ ...
-`
+```
 
 You can use your custom ssh key, but in that case please update **SSH_PUBLIC_KEY** property in the *.env* file and set it to your custom ssh key.
 
