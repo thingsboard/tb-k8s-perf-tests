@@ -49,6 +49,9 @@ $ ./cluster-validate.sh
 $ ./k8s-deploy-metrics.sh
 `
 
+**NOTE** Kubernetes Dashboard will ask twice for the same admin credentials during initial login.
+
+
 ## ThingsBoard Microservices Installation
 
 Execute the following command to run installation:
