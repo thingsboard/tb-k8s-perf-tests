@@ -49,7 +49,8 @@ $ ./cluster-validate.sh
 $ ./k8s-deploy-metrics.sh
 `
 
-**NOTE** Kubernetes Dashboard Access will ask twice for the same admin credentials during initial login.
+**NOTE** Kubernetes Dashboard will ask twice for the same admin credentials during initial login.
+
 
 ## ThingsBoard Microservices Installation
 
