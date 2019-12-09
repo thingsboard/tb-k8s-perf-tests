@@ -259,7 +259,7 @@ metadata:
   name: tb-node
   namespace: thingsboard
 spec:
-  replicas: 15
+  replicas: 12
   selector:
     matchLabels:
       app: tb-node
@@ -400,7 +400,7 @@ metadata:
   name: tb-mqtt-transport
   namespace: thingsboard
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: tb-mqtt-transport
