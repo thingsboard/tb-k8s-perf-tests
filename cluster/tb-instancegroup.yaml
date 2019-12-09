@@ -112,8 +112,8 @@ metadata:
 spec:
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.xlarge
-  maxSize: 12
-  minSize: 12
+  maxSize: 20
+  minSize: 2O
   nodeLabels:
     kops.k8s.io/instancegroup: tb-node
     nodeType: tb-node

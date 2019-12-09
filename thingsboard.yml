@@ -125,7 +125,7 @@ spec:
         - name: KAFKA_INTER_BROKER_LISTENER_NAME
           value: "INSIDE"
         - name: KAFKA_CREATE_TOPICS
-          value: "js.eval.requests:120:1:delete --config=retention.ms=60000 --config=segment.bytes=26214400 --config=retention.bytes=104857600,tb.transport.api.requests:30:1:delete --config=retention.ms=60000 --config=segment.bytes=26214400 --config=retention.bytes=104857600,tb.rule-engine:30:1:delete --config=retention.ms=60000 --config=segment.bytes=26214400 --config=retention.bytes=104857600"
+          value: "js.eval.requests:120:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb.transport.api.requests:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb.rule-engine:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120"
         - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
           value: "false"
         - name: KAFKA_LOG_RETENTION_BYTES
@@ -259,7 +259,7 @@ metadata:
   name: tb-node
   namespace: thingsboard
 spec:
-  replicas: 12
+  replicas: 20
   selector:
     matchLabels:
       app: tb-node
@@ -359,6 +359,10 @@ spec:
           value: "1000"
         - name: ACTORS_JS_STATISTICS_PRINT_INTERVAL_MS
           value: "1000"
+        - name: TB_RULE_ENGINE_MAX_POLL_RECORDS_PER_SECOND
+          value: "10000000"
+        - name: TB_RULE_ENGINE_MAX_POLL_RECORDS_PER_MINUTE
+          value: "120000000"
         envFrom:
         - configMapRef:
             name: tb-node-db-config
