@@ -73,11 +73,11 @@ spec:
     - name: GATEWAY_DELETE_ON_COMPLETE
       value: "false"
     - name: ALARM_STORM_START_SECOND
-      value: "20"
+      value: "60"
     - name: ALARM_STORM_END_SECOND
-      value: "30"
+      value: "360"
     - name: ALARMS_PER_SECOND
-      value: "200"
+      value: "100"
     - name: WARMUP_ENABLED
       value: "true"
     envFrom:

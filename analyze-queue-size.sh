@@ -47,10 +47,10 @@ function printQueueInfo() {
 
 
 echo '**** ATTRIBUTES QUEUE SIZE ****'
-printQueueInfo 'Attributes queueSize' 8 9 5
+printQueueInfo '\[Attributes\] queueSize' 8 9 5
 
 echo '**** ATTRIBUTES TOTAL ADDED ****'
-printQueueInfo 'Attributes queueSize' 10 11 5
+printQueueInfo '\[Attributes\] queueSize' 10 11 5
 
 echo '**** TOTAL ADDED ****'
 printQueueInfo 'Permits queueSize' 10 11 5

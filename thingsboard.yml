@@ -213,7 +213,7 @@ metadata:
   name: tb-js-executor
   namespace: thingsboard
 spec:
-  replicas: 30
+  replicas: 120
   selector:
     matchLabels:
       app: tb-js-executor
@@ -259,7 +259,7 @@ metadata:
   name: tb-node
   namespace: thingsboard
 spec:
-  replicas: 20
+  replicas: 30
   selector:
     matchLabels:
       app: tb-node
@@ -324,7 +324,7 @@ spec:
         - name: HTTP_LOG_CONTROLLER_ERROR_STACK_TRACE
           value: "false"
         - name: SPRING_DATASOURCE_MAXIMUM_POOL_SIZE
-          value: "10"
+          value: "4"
         - name: PERSIST_STATE_TO_TELEMETRY
           value: "true"
         - name: DEFAULT_STATE_CHECK_INTERVAL
@@ -363,6 +363,10 @@ spec:
           value: "10000000"
         - name: TB_RULE_ENGINE_MAX_POLL_RECORDS_PER_MINUTE
           value: "120000000"
+        - name: REMOTE_JS_MAX_PENDING_REQUESTS
+          value: "20000"
+        - name: REMOTE_JS_MAX_REQUEST_TIMEOUT
+          value: "20000"
         envFrom:
         - configMapRef:
             name: tb-node-db-config
@@ -456,6 +460,8 @@ spec:
           value: "60000"
         - name: TB_TRANSPORT_SESSIONS_INACTIVITY_TIMEOUT
           value: "86400000"
+        - name: TB_TRANSPORT_SESSIONS_REPORT_TIMEOUT
+          value: "60000"
         volumeMounts:
           - mountPath: /config
             name: tb-mqtt-transport-config
