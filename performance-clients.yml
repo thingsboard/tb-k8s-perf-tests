@@ -62,6 +62,10 @@ spec:
       - name: tb-performance
         imagePullPolicy: Always
         image: thingsboard/tb-performance-test:latest
+        resources:
+          requests:
+            cpu: "1500m"
+            memory: 3Gi
         env:
         - name: TEST_ENABLED
           value: "true"
