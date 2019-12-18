@@ -79,7 +79,17 @@ spec:
     - name: ALARMS_PER_SECOND
       value: "100"
     - name: WARMUP_ENABLED
-      value: "true"
+      value: "false"
+    - name: CUSTOMER_END_IDX
+      value: "0"
+    - name: DASHBOARD_CREATE_ON_START
+      value: "false"
+    - name: CUSTOMER_CREATE_ON_START
+      value: "false"
+    - name: UPDATE_ROOT_RULE_CHAIN
+      value: "false"
+    - name: REVERT_ROOT_RULE_CHAIN
+      value: "false"
     envFrom:
     - configMapRef:
         name: tb-performance-config

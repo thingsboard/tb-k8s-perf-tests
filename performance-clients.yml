@@ -102,10 +102,19 @@ spec:
         - name: ALARM_STORM_END_SECOND
           value: "360"
         - name: ALARMS_PER_SECOND
-          value: "100"
+          value: "10"
         - name: WARMUP_ENABLED
-          value: "true"
+          value: "false"
+        - name: DASHBOARD_CREATE_ON_START
+          value: "false"
+        - name: CUSTOMER_CREATE_ON_START
+          value: "false"
+        - name: CUSTOMER_END_IDX
+          value: "0"
+        - name: UPDATE_ROOT_RULE_CHAIN
+          value: "false"
+        - name: REVERT_ROOT_RULE_CHAIN
+          value: "false"
         envFrom:
         - configMapRef:
             name: tb-performance-config
-      restartPolicy: Never

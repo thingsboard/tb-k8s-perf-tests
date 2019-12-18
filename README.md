@@ -6,8 +6,23 @@ This folder containing scripts and Kubernetes resources configurations to run Th
 
 ThingsBoard Microservices are running on Kubernetes cluster.
 You need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
+
+Current supported versions: 
+
+- kubectl **1.17.0**
+- kops **1.15.0 (git-9992b4055)**
+
 Follow [Getting Started with kops on AWS](https://github.com/kubernetes/kops/blob/master/docs/getting_started/aws.md)
 to prepare necessary tools for deploying cluster on AWS using kops.
+
+
+Install [Docker CE](https://docs.docker.com/install/) and do the login to the Docker Cloud.
+
+Please make sure that you are able to run:
+
+`
+docker run hello-world
+`
 
 ## Generate ssh key for kops resources
 
@@ -72,12 +87,25 @@ Execute the following command to deploy resources:
 $ ./k8s-deploy-resources.sh
 `
 
-Execute the following command to install performance data:
+Next step we are going create devices and gateways.
+
+Please update *k8s-install-performance.sh* file and set required number of gateways, devices and test api (device directly connected or device connected over gateway api):
+ - *deviceStartIdx=${1:-0}* - device start index to create from
+ - *deviceEndIdx=${2:-1000000}* - device end index
+ - *gatewayStartIdx=${3:-0}* - gateway start index to create from
+ - *gatewayEndIdx=${4:-0}* - gateway end index
+ - testApi=${5:-device} - please set 'device' if you would like to use device API or change it to 'gateway' if you would like to use gateway API
+
+Once you have updated file accordingly to your test case, execute the following command to install performance data:
 
 `
 $ ./k8s-install-performance.sh
 `
 
+### Gateway API test
+
+In case you would like to validate gateway API case, please execute next commands and skip *Device API test* section. 
+If you would like to validate device API case, please skip this section and go to *Device API test* section.
 
 Execute the following command to start performance test for first 50000 Gateways:
 
@@ -90,6 +118,15 @@ Execute the following command to start performance test for the next 50000 Gatew
 `
 $ ./k8s-run-performance2.sh
 `
+### Device API test
+
+Execute the following command to start pefrormance test for 1000000 Devices:
+
+`
+$ ./k8s-run-performance-clients.sh
+`
+
+### Test results
 
 After a while when all resources will be successfully started you can open `http://{your-cluster-ip}` in you browser (for ex. `http://192.168.99.101`).
 You should see ThingsBoard login page.

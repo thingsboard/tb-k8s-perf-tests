@@ -36,6 +36,7 @@ function installPerformance() {
     deviceEndIdx=$2
     gatewayStartIdx=$3
     gatewayEndIdx=$4
+    testApi=$5
 
     kubectl apply -f tb-performance-configmap.yml
     kubectl apply -f performance-setup.yml &&
@@ -45,6 +46,10 @@ export DEVICE_CREATE_ON_START=true; \
 export DEVICE_DELETE_ON_COMPLETE=false; \
 export GATEWAY_CREATE_ON_START=true; \
 export GATEWAY_DELETE_ON_COMPLETE=false; \
+export UPDATE_ROOT_RULE_CHAIN=true; \
+export REVERT_ROOT_RULE_CHAIN=false; \
+export CUSTOMER_END_IDX=0; \
+export TEST_API='$testApi'; \
 export DEVICE_START_IDX='$deviceStartIdx'; \
 export DEVICE_END_IDX='$deviceEndIdx'; \
 export GATEWAY_START_IDX='$gatewayStartIdx'; \
@@ -58,11 +63,12 @@ start-tests.sh; touch /install-finished;'
 deviceStartIdx=${1:-0}
 deviceEndIdx=${2:-1000000}
 gatewayStartIdx=${3:-0}
-gatewayEndIdx=${4:-100000}
+gatewayEndIdx=${4:-0}
+testApi=${5:-device}
 
 source .env
 
 kubectl apply -f tb-namespace.yml
 kubectl config set-context $(kubectl config current-context) --namespace=thingsboard
 
-installPerformance ${deviceStartIdx} ${deviceEndIdx} ${gatewayStartIdx} ${gatewayEndIdx}
+installPerformance ${deviceStartIdx} ${deviceEndIdx} ${gatewayStartIdx} ${gatewayEndIdx} ${testApi}
