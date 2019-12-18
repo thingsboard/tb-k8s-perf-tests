@@ -86,6 +86,7 @@ Execute the following command to deploy resources:
 `
 $ ./k8s-deploy-resources.sh
 `
+
 Before running install script, please make sure that cluster is running fine.
 
 You can execute following command to download tb-node logs:
@@ -93,6 +94,7 @@ You can execute following command to download tb-node logs:
 `
 $ ./k8s-tb-node-logs.sh
 `
+
 This script will create **tb-node-logs** folder, which will contain latest tb-node logs. Please search for any **ERROR** inside log files. If no errors, you can go to next steps.
 
 Next step we are going create devices and gateways.
