@@ -94,7 +94,7 @@ Please update *k8s-install-performance.sh* file and set required number of gatew
  - *deviceEndIdx=${2:-1000000}* - device end index
  - *gatewayStartIdx=${3:-0}* - gateway start index to create from
  - *gatewayEndIdx=${4:-0}* - gateway end index
- - testApi=${5:-device} - please set 'device' if you would like to use device API or change it to 'gateway' if you would like to use gateway API
+ - testApi=${5:-device} - please set **'device'** if you would like to use device API or change it to **'gateway'** if you would like to use gateway API
 
 Once you have updated file accordingly to your test case, execute the following command to install performance data:
 
@@ -104,8 +104,9 @@ $ ./k8s-install-performance.sh
 
 ### Gateway API test
 
-In case you would like to validate gateway API case, please execute next commands and skip *Device API test* section. 
-If you would like to validate device API case, please skip this section and go to *Device API test* section.
+In case you would like to validate gateway API case, please execute next commands and skip **Device API test** section. 
+
+If you would like to validate device API case, please skip this section and go to **Device API test** section.
 
 Execute the following command to start performance test for first 50000 Gateways:
 
