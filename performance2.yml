@@ -79,7 +79,7 @@ spec:
     - name: ALARMS_PER_SECOND
       value: "100"
     - name: WARMUP_ENABLED
-      value: "false"
+      value: "true"
     - name: CUSTOMER_END_IDX
       value: "0"
     - name: DASHBOARD_CREATE_ON_START

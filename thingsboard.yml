@@ -148,13 +148,12 @@ metadata:
   name: tb-kafka
   namespace: thingsboard
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: tb-kafka
   ports:
-  - port: 9092
-    targetPort: 9092
-    name: tb-kafka-port
+  - name: tb-kafka-port
+    port: 9092
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -260,7 +259,7 @@ metadata:
   name: tb-node
   namespace: thingsboard
 spec:
-  replicas: 30
+  replicas: 20
   selector:
     matchLabels:
       app: tb-node
@@ -462,7 +461,7 @@ spec:
         - name: TB_TRANSPORT_SESSIONS_INACTIVITY_TIMEOUT
           value: "86400000"
         - name: TB_TRANSPORT_SESSIONS_REPORT_TIMEOUT
-          value: "5000"
+          value: "300000"
         volumeMounts:
           - mountPath: /config
             name: tb-mqtt-transport-config

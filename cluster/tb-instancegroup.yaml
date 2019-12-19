@@ -90,7 +90,7 @@ metadata:
   name: postgres
 spec:
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
-  machineType: i3.2xlarge
+  machineType: c5.2xlarge
   maxSize: 1
   minSize: 1
   nodeLabels:
@@ -112,8 +112,8 @@ metadata:
 spec:
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.xlarge
-  maxSize: 15
-  minSize: 15
+  maxSize: 10
+  minSize: 10
   nodeLabels:
     kops.k8s.io/instancegroup: tb-node
     nodeType: tb-node
