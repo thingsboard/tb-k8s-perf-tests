@@ -7,9 +7,9 @@ metadata:
   name: cassandra
 spec:
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
-  machineType: c5d.xlarge
-  maxSize: 20
-  minSize: 20
+  machineType: c5.xlarge
+  maxSize: 15
+  minSize: 15
   nodeLabels:
     kops.k8s.io/instancegroup: cassandra
     nodeType: cassandra
@@ -28,7 +28,7 @@ metadata:
   name: js-executor
 spec:
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
-  machineType: c5.4xlarge
+  machineType: c5.xlarge
   maxSize: 3
   minSize: 3
   nodeLabels:
@@ -70,8 +70,8 @@ metadata:
 spec:
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.large
-  maxSize: 8
-  minSize: 8
+  maxSize: 4
+  minSize: 4
   nodeLabels:
     kops.k8s.io/instancegroup: mqtt-transport
     nodeType: mqtt-transport
@@ -90,7 +90,7 @@ metadata:
   name: postgres
 spec:
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
-  machineType: c5.2xlarge
+  machineType: m5.large
   maxSize: 1
   minSize: 1
   nodeLabels:
@@ -112,8 +112,8 @@ metadata:
 spec:
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.xlarge
-  maxSize: 10
-  minSize: 10
+  maxSize: 15
+  minSize: 15
   nodeLabels:
     kops.k8s.io/instancegroup: tb-node
     nodeType: tb-node
@@ -141,30 +141,6 @@ spec:
   nodeLabels:
     kops.k8s.io/instancegroup: tb-performance
     nodeType: tb-performance
-  role: Node
-  subnets:
-  - us-east-1a
-
----
-
-apiVersion: kops.k8s.io/v1alpha2
-kind: InstanceGroup
-metadata:
-  creationTimestamp: 2019-11-11T15:35:45Z
-  labels:
-    kops.k8s.io/cluster: tb-performance.k8s.local
-  name: tb-performance2
-spec:
-  kubelet:
-    experimentalAllowedUnsafeSysctls:
-    - net.ipv4.tcp_fin_timeout
-  image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
-  machineType: c5.large
-  maxSize: 1
-  minSize: 1
-  nodeLabels:
-    kops.k8s.io/instancegroup: tb-performance
-    nodeType: tb-performance-2
   role: Node
   subnets:
   - us-east-1a
