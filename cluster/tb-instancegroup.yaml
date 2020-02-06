@@ -156,7 +156,7 @@ metadata:
   name: tb-kafka
 spec:
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
-  machineType: c5.2xlarge
+  machineType: m5.large
   maxSize: 1
   minSize: 1
   nodeLabels:
@@ -177,7 +177,7 @@ metadata:
   name: thirdparty
 spec:
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
-  machineType: c5.xlarge
+  machineType: m5.large
   maxSize: 1
   minSize: 1
   nodeLabels:

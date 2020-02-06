@@ -103,7 +103,7 @@ spec:
             port: 9092
         resources:
           requests:
-            cpu: "2000m"
+            cpu: "1500m"
             memory: 6Gi
         livenessProbe:
           periodSeconds: 5
