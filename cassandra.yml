@@ -59,7 +59,7 @@ metadata:
     app: cassandra
 spec:
   serviceName: cassandra
-  replicas: 20
+  replicas: 15
   selector:
     matchLabels:
       app: cassandra

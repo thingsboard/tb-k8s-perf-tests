@@ -61,7 +61,7 @@ spec:
       containers:
       - name: tb-performance
         imagePullPolicy: Always
-        image: thingsboard/tb-performance-test:latest
+        image: thingsboard/tb-ce-performance-test:1.0.0
         resources:
           requests:
             cpu: "1500m"
@@ -72,7 +72,7 @@ spec:
         - name: TEST_API
           value: "device"
         - name: MESSAGES_PER_SECOND
-          value: "1000"
+          value: "833"
         - name: DURATION_IN_SECONDS
           value: "14400"
         - name: USE_INSTANCE_IDX
@@ -98,11 +98,11 @@ spec:
         - name: GATEWAY_DELETE_ON_COMPLETE
           value: "false"
         - name: ALARM_STORM_START_SECOND
-          value: "60"
+          value: "0"
         - name: ALARM_STORM_END_SECOND
-          value: "360"
+          value: "0"
         - name: ALARMS_PER_SECOND
-          value: "10"
+          value: "0"
         - name: WARMUP_ENABLED
           value: "false"
         - name: DASHBOARD_CREATE_ON_START
@@ -115,6 +115,8 @@ spec:
           value: "false"
         - name: REVERT_ROOT_RULE_CHAIN
           value: "false"
+        - name: TEST_PAYLOAD_TYPE
+          value: "SMART_TRACKER"
         envFrom:
         - configMapRef:
             name: tb-performance-config

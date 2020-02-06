@@ -125,7 +125,7 @@ spec:
         - name: KAFKA_INTER_BROKER_LISTENER_NAME
           value: "INSIDE"
         - name: KAFKA_CREATE_TOPICS
-          value: "js.eval.requests:120:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb.transport.api.requests:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb.rule-engine:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120"
+          value: "js.eval.requests:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb.transport.api.requests:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb.rule-engine:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120"
         - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
           value: "false"
         - name: KAFKA_LOG_RETENTION_BYTES
@@ -184,8 +184,8 @@ spec:
             port: 6379
         resources:
           requests:
-            cpu: "2000m"
-            memory: 6Gi
+            cpu: "1000m"
+            memory: 3Gi
         volumeMounts:
         - mountPath: /data
           name: redis-data
@@ -213,7 +213,7 @@ metadata:
   name: tb-js-executor
   namespace: thingsboard
 spec:
-  replicas: 120
+  replicas: 30
   selector:
     matchLabels:
       app: tb-js-executor
@@ -229,7 +229,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-js-executor:latest
+        image: thingsboard/tb-js-executor:2.4.3
         env:
         - name: REMOTE_JS_EVAL_REQUEST_TOPIC
           value: "js.eval.requests"
@@ -259,7 +259,7 @@ metadata:
   name: tb-node
   namespace: thingsboard
 spec:
-  replicas: 20
+  replicas: 15
   selector:
     matchLabels:
       app: tb-node
@@ -284,7 +284,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-node:latest
+        image: thingsboard/tb-node:2.4.3
         ports:
         - containerPort: 8080
           name: http
@@ -375,8 +375,8 @@ spec:
             name: tb-node-config
         resources:
           requests:
-            cpu: "1500m"
-            memory: 1500M
+            cpu: "2500m"
+            memory: 5500M
         livenessProbe:
           httpGet:
             path: /login
@@ -433,7 +433,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-mqtt-transport:latest
+        image: thingsboard/tb-mqtt-transport:2.4.3
         ports:
         - containerPort: 1883
           name: mqtt

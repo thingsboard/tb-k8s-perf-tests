@@ -42,7 +42,7 @@ spec:
   containers:
   - name: tb-performance-setup
     imagePullPolicy: Always
-    image: thingsboard/tb-performance-test:latest
+    image: thingsboard/tb-ce-performance-test:1.0.0
     envFrom:
     - configMapRef:
         name: tb-performance-config
