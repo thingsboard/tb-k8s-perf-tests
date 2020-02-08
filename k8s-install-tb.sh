@@ -50,19 +50,6 @@ function installPostgres() {
     kubectl rollout status deployment/postgres
 }
 
-function installCassandra() {
-
-    kubectl apply -f cassandra.yml
-    # kubectl rollout status statefulset/cassandra
-
-    kubectl wait --for=condition=Ready pod/cassandra-0 --timeout=600s &&
-    kubectl exec -it cassandra-0 -- bash -c "cqlsh -e \
-                    \"CREATE KEYSPACE IF NOT EXISTS thingsboard \
-                    WITH replication = { \
-                        'class' : 'SimpleStrategy', \
-                        'replication_factor' : 1 \
-                    };\""
-}
 
 while [[ $# -gt 0 ]]
 do
@@ -96,5 +83,4 @@ kubectl create secret generic regcred \
     --type=kubernetes.io/dockerconfigjson
 
 installPostgres
-installCassandra
 installTb ${loadDemo}

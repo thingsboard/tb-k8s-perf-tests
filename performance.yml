@@ -48,22 +48,22 @@ spec:
   containers:
   - name: tb-performance
     imagePullPolicy: Always
-    image: thingsboard/tb-performance-test:latest
+    image: thingsboard/tb-ce-performance-test:1.0.0
     env:
     - name: TEST_ENABLED
       value: "true"
     - name: MESSAGES_PER_SECOND
-      value: "10000"
+      value: "280"
     - name: DURATION_IN_SECONDS
       value: "14400"
     - name: DEVICE_START_IDX
       value: "0"
     - name: DEVICE_END_IDX
-      value: "500000"
+      value: "1000000"
     - name: GATEWAY_START_IDX
       value: "0"
     - name: GATEWAY_END_IDX
-      value: "50000"
+      value: "0"
     - name: DEVICE_CREATE_ON_START
       value: "false"
     - name: DEVICE_DELETE_ON_COMPLETE
@@ -73,11 +73,11 @@ spec:
     - name: GATEWAY_DELETE_ON_COMPLETE
       value: "false"
     - name: ALARM_STORM_START_SECOND
-      value: "60"
+      value: "0"
     - name: ALARM_STORM_END_SECOND
-      value: "360"
+      value: "0"
     - name: ALARMS_PER_SECOND
-      value: "100"
+      value: "0"
     - name: WARMUP_ENABLED
       value: "true"
     - name: CUSTOMER_END_IDX
@@ -90,6 +90,10 @@ spec:
       value: "false"
     - name: REVERT_ROOT_RULE_CHAIN
       value: "false"
+    - name: TEST_PAYLOAD_TYPE
+      value: "SMART_METER"
+    - name: TEST_API
+      value: "device"
     envFrom:
     - configMapRef:
         name: tb-performance-config

@@ -44,6 +44,5 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/kops/master/addons
 kubectl apply -f tb-namespace.yml
 kubectl config set-context $(kubectl config current-context) --namespace=thingsboard
 kubectl apply -f tb-node-configmap.yml
-kubectl apply -f tb-mqtt-transport-configmap.yml
 
 kubectl apply -f thingsboard.yml

@@ -40,6 +40,4 @@ data:
   REST_URL: http://tb-node:8080
   REST_USERNAME: tenant@thingsboard.org
   REST_PASSWORD: tenant
-  MQTT_HOST: tb-mqtt-transport
-  MQTT_PORT: "1883"
-  DEVICE_API: MQTT
+  DEVICE_API: HTTP

@@ -125,7 +125,7 @@ spec:
         - name: KAFKA_INTER_BROKER_LISTENER_NAME
           value: "INSIDE"
         - name: KAFKA_CREATE_TOPICS
-          value: "js.eval.requests:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb.transport.api.requests:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb.rule-engine:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120"
+          value: "js.eval.requests:18:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb.rule-engine:18:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120"
         - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
           value: "false"
         - name: KAFKA_LOG_RETENTION_BYTES
@@ -213,7 +213,7 @@ metadata:
   name: tb-js-executor
   namespace: thingsboard
 spec:
-  replicas: 30
+  replicas: 9
   selector:
     matchLabels:
       app: tb-js-executor
@@ -259,7 +259,7 @@ metadata:
   name: tb-node
   namespace: thingsboard
 spec:
-  replicas: 15
+  replicas: 2
   selector:
     matchLabels:
       app: tb-node
@@ -315,8 +315,6 @@ spec:
           value: "tb-kafka:9092"
         - name: JS_EVALUATOR
           value: "remote"
-        - name: TRANSPORT_TYPE
-          value: "remote"
         - name: CACHE_TYPE
           value: "redis"
         - name: REDIS_HOST
@@ -331,10 +329,6 @@ spec:
           value: "60"
         - name: DEFAULT_INACTIVITY_TIMEOUT
           value: "300"
-        - name: CASSANDRA_QUERY_BUFFER_SIZE
-          value: "1000000"
-        - name: TB_TRANSPORT_SESSIONS_INACTIVITY_TIMEOUT
-          value: "86400000"
         - name: CLUSTER_VIRTUAL_NODES_SIZE
           value: "4096"
         - name: TB_RULE_ENGINE_STATS_ENABLED
@@ -401,101 +395,6 @@ spec:
   ports:
   - port: 8080
     name: http
----
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: tb-mqtt-transport
-  namespace: thingsboard
-spec:
-  replicas: 8
-  selector:
-    matchLabels:
-      app: tb-mqtt-transport
-  template:
-    metadata:
-      labels:
-        app: tb-mqtt-transport
-    spec:
-      nodeSelector:
-        nodeType: mqtt-transport
-      volumes:
-        - name: tb-mqtt-transport-config
-          configMap:
-            name: tb-mqtt-transport-config
-            items:
-            - key: conf
-              path:  tb-mqtt-transport.conf
-            - key: logback
-              path:  logback.xml
-      imagePullSecrets:
-        - name: regcred
-      containers:
-      - name: server
-        imagePullPolicy: Always
-        image: thingsboard/tb-mqtt-transport:2.4.3
-        ports:
-        - containerPort: 1883
-          name: mqtt
-        env:
-        - name: CLUSTER_NODE_ID
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: TB_HOST
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: MQTT_BIND_ADDRESS
-          value: "0.0.0.0"
-        - name: MQTT_BIND_PORT
-          value: "1883"
-        - name: MQTT_TIMEOUT
-          value: "10000"
-        - name: TB_KAFKA_SERVERS
-          value: "tb-kafka:9092"
-        - name: TB_TRANSPORT_MAX_PENDING_REQUESTS
-          value: "1000000"
-        - name: TB_TRANSPORT_MAX_REQUEST_TIMEOUT
-          value: "60000"
-        - name: TB_TRANSPORT_SESSIONS_INACTIVITY_TIMEOUT
-          value: "86400000"
-        - name: TB_TRANSPORT_SESSIONS_REPORT_TIMEOUT
-          value: "300000"
-        volumeMounts:
-          - mountPath: /config
-            name: tb-mqtt-transport-config
-        readinessProbe:
-          periodSeconds: 20
-          tcpSocket:
-            port: 1883
-        resources:
-          requests:
-            cpu: "1500m"
-            memory: 1500M
-        livenessProbe:
-          periodSeconds: 20
-          tcpSocket:
-            port: 1883
-      initContainers:
-      - name: wait-for-kafka
-        image: busybox:1.28
-        command: ['sh', '-c', 'echo "Waiting for kafka to launch..."; until nc -w 1 -z tb-kafka 9092; do echo "Waiting for kafka"; sleep 1; done; echo "Kafka launched";']
-      restartPolicy: Always
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: tb-mqtt-transport
-  namespace: thingsboard
-spec:
-  type: LoadBalancer
-  selector:
-    app: tb-mqtt-transport
-  ports:
-  - port: 1883
-    targetPort: 1883
-    name: mqtt
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
