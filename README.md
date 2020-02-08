@@ -1,4 +1,4 @@
-# Kubernetes resources configuration for ThingsBoard Microservices
+# Kubernetes resources configuration for ThingsBoard Microservices (1 Million Smart Meters)
 
 This folder containing scripts and Kubernetes resources configurations to run ThingsBoard in Microservices mode.
 
