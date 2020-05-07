@@ -229,7 +229,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-js-executor:2.4.3
+        image: thingsboard/tb-js-executor:2.5.0
         env:
         - name: REMOTE_JS_EVAL_REQUEST_TOPIC
           value: "js.eval.requests"
@@ -284,7 +284,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-node:2.4.3
+        image: thingsboard/tb-node:2.5.0
         ports:
         - containerPort: 8080
           name: http
