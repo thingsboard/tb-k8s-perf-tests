@@ -51,12 +51,12 @@ spec:
   containers:
   - name: tb-db-setup
     imagePullPolicy: Always
-    image: thingsboard/tb-pe-node:latest
+    image: thingsboard/tb-pe-node:2.5.0PE
     envFrom:
     - configMapRef:
         name: tb-node-db-config
     volumeMounts:
       - mountPath: /config
         name: tb-node-config
-    command: ['sh', '-c', 'while [ ! -f /install-finished ]; do sleep 2; done;']
+    command: ['sh', '-c', 'while [ ! -f /tmp/install-finished ]; do sleep 2; done;']
   restartPolicy: Never
