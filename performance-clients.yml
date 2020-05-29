@@ -98,11 +98,11 @@ spec:
         - name: GATEWAY_DELETE_ON_COMPLETE
           value: "false"
         - name: ALARM_STORM_START_SECOND
-          value: "0"
+          value: "60"
         - name: ALARM_STORM_END_SECOND
-          value: "0"
+          value: "120"
         - name: ALARMS_PER_SECOND
-          value: "0"
+          value: "200"
         - name: WARMUP_ENABLED
           value: "false"
         - name: DASHBOARD_CREATE_ON_START
@@ -116,7 +116,7 @@ spec:
         - name: REVERT_ROOT_RULE_CHAIN
           value: "false"
         - name: TEST_PAYLOAD_TYPE
-          value: "SMART_TRACKER"
+          value: "RANDOM"
         envFrom:
         - configMapRef:
             name: tb-performance-config

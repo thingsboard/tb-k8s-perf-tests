@@ -78,12 +78,18 @@ spec:
   - name: zk-port
     port: 2181
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
   name: tb-kafka
   namespace: thingsboard
 spec:
+  serviceName: "tb-kafka"
+  replicas: 3
+  podManagementPolicy: Parallel
+  selector:
+    matchLabels:
+      app: tb-kafka
   template:
     metadata:
       labels:
@@ -92,40 +98,47 @@ spec:
       nodeSelector:
         nodeType: tb-kafka
       containers:
-      - name: server
+      - name: tb-kafka
         imagePullPolicy: Always
         image: wurstmeister/kafka:2.12-2.2.1
         ports:
         - containerPort: 9092
+          name: kafka-int
         readinessProbe:
           periodSeconds: 20
+          timeoutSeconds: 20
           tcpSocket:
             port: 9092
         resources:
           requests:
-            cpu: "1500m"
-            memory: 6Gi
+            cpu: "7000m"
+            memory: 14Gi
         livenessProbe:
+          timeoutSeconds: 5
           periodSeconds: 5
           tcpSocket:
             port: 9092
         env:
+        - name: BROKER_ID_COMMAND
+          value: "hostname | cut -d'-' -f3"
         - name: KAFKA_ZOOKEEPER_CONNECT
           value: "zookeeper:2181"
-        - name: KAFKA_ADVERTISED_HOST_NAME
-          value: "tb-kafka"
-        - name: KAFKA_ADVERTISED_PORT
-          value: "9092"
+        - name: KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS
+          value: "60000"
+        - name: KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE
+          value: "true"
         - name: KAFKA_LISTENERS
-          value: "INSIDE://:9093,OUTSIDE://:9092"
+          value: "INSIDE://:9092"
         - name: KAFKA_ADVERTISED_LISTENERS
-          value: "INSIDE://:9093,OUTSIDE://tb-kafka:9092"
+          value: "INSIDE://:9092"
         - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
-          value: "INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT"
+          value: "INSIDE:PLAINTEXT"
         - name: KAFKA_INTER_BROKER_LISTENER_NAME
           value: "INSIDE"
+        - name: KAFKA_CONTROLLER_SHUTDOWN_ENABLE
+          value: "true"
         - name: KAFKA_CREATE_TOPICS
-          value: "js.eval.requests:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb.transport.api.requests:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb.rule-engine:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120"
+          value: "js_eval.requests:120:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb_transport.api.requests:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb_rule_engine:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120"
         - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
           value: "false"
         - name: KAFKA_LOG_RETENTION_BYTES
@@ -136,6 +149,8 @@ spec:
           value: "300000"
         - name: KAFKA_LOG_CLEANUP_POLICY
           value: "delete"
+        - name: KAFKA_PORT
+          value: "9092"
       initContainers:
       - name: wait-for-zookeeper
         image: busybox:1.28
@@ -149,11 +164,13 @@ metadata:
   namespace: thingsboard
 spec:
   type: ClusterIP
+  ports:
+    - port: 9092
+      targetPort: 9092
+      name: kafka-int
+  clusterIP: None      
   selector:
     app: tb-kafka
-  ports:
-  - name: tb-kafka-port
-    port: 9092
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -213,7 +230,7 @@ metadata:
   name: tb-js-executor
   namespace: thingsboard
 spec:
-  replicas: 30
+  replicas: 120
   selector:
     matchLabels:
       app: tb-js-executor
@@ -229,10 +246,10 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-js-executor:2.4.3
+        image: thingsboard/tb-js-executor:2.5.1
         env:
         - name: REMOTE_JS_EVAL_REQUEST_TOPIC
-          value: "js.eval.requests"
+          value: "js_eval.requests"
         - name: TB_KAFKA_SERVERS
           value: "tb-kafka:9092"
         - name: LOGGER_LEVEL
@@ -253,13 +270,15 @@ spec:
         command: ['sh', '-c', 'echo "Waiting for kafka to launch..."; until nc -w 1 -z tb-kafka 9092; do echo "Waiting for kafka"; sleep 1; done; echo "Kafka launched";']
       restartPolicy: Always
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
   name: tb-node
   namespace: thingsboard
 spec:
+  serviceName: tb-node
   replicas: 15
+  podManagementPolicy: "Parallel"
   selector:
     matchLabels:
       app: tb-node
@@ -284,25 +303,21 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-node:2.4.3
+        image: thingsboard/tb-node:2.5.1
         ports:
         - containerPort: 8080
           name: http
         - containerPort: 9001
           name: rpc
         env:
-        - name: RPC_HOST
-          valueFrom:
-            fieldRef:
-              fieldPath: status.podIP
-        - name: CLUSTER_NODE_ID
+        - name: TB_SERVICE_ID
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: TB_HOST
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
+        - name: TB_SERVICE_TYPE
+          value: "monolith"
+        - name: TB_QUEUE_TYPE
+          value: "kafka"
         - name: ZOOKEEPER_ENABLED
           value: "true"
         - name: ZOOKEEPER_URL
@@ -348,7 +363,7 @@ spec:
         - name: CASSANDRA_QUERY_PRINT_FREQ
           value: "10000"
         - name: SQL_ATTRIBUTES_BATCH_STATS_PRINT_MS
-          value: "1000"
+          value: "10000"
         - name: TS_KV_PARTITIONING
           value: "INDEFINITE"
         - name: ACTORS_RULE_JS_THREAD_POOL_SIZE
@@ -356,9 +371,9 @@ spec:
         - name: TB_JS_REMOTE_STATS_ENABLED
           value: "true"
         - name: TB_JS_REMOTE_STATS_PRINT_INTERVAL_MS
-          value: "1000"
+          value: "10000"
         - name: ACTORS_JS_STATISTICS_PRINT_INTERVAL_MS
-          value: "1000"
+          value: "10000"
         - name: TB_RULE_ENGINE_MAX_POLL_RECORDS_PER_SECOND
           value: "10000000"
         - name: TB_RULE_ENGINE_MAX_POLL_RECORDS_PER_MINUTE
@@ -367,6 +382,18 @@ spec:
           value: "20000"
         - name: REMOTE_JS_MAX_REQUEST_TIMEOUT
           value: "20000"
+        - name: TB_QUEUE_RULE_ENGINE_STATS_PRINT_INTERVAL_MS
+          value: "10000"
+        - name: TB_QUEUE_RE_MAIN_PROCESSING_STRATEGY_TYPE
+          value: "RETRY_FAILED_AND_TIMED_OUT"
+        - name: TB_QUEUE_RE_MAIN_PROCESSING_STRATEGY_RETRIES
+          value: "3"
+        - name: TB_QUEUE_CORE_PARTITIONS
+          value: "30"
+        - name: TB_QUEUE_RE_MAIN_PARTITIONS
+          value: "30"
+        - name: TB_QUEUE_RE_MAIN_PACK_PROCESSING_TIMEOUT_MS
+          value: "30000"
         envFrom:
         - configMapRef:
             name: tb-node-db-config
@@ -433,19 +460,17 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-mqtt-transport:2.4.3
+        image: thingsboard/tb-mqtt-transport:2.5.1
         ports:
         - containerPort: 1883
           name: mqtt
         env:
-        - name: CLUSTER_NODE_ID
+        - name: TB_SERVICE_ID
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: TB_HOST
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
+        - name: TB_QUEUE_TYPE
+          value: "kafka"
         - name: MQTT_BIND_ADDRESS
           value: "0.0.0.0"
         - name: MQTT_BIND_PORT
@@ -462,6 +487,10 @@ spec:
           value: "86400000"
         - name: TB_TRANSPORT_SESSIONS_REPORT_TIMEOUT
           value: "300000"
+        - name: TB_QUEUE_CORE_PARTITIONS
+          value: "30"
+        - name: TB_QUEUE_RE_MAIN_PARTITIONS
+          value: "30"
         volumeMounts:
           - mountPath: /config
             name: tb-mqtt-transport-config
@@ -474,6 +503,7 @@ spec:
             cpu: "1500m"
             memory: 1500M
         livenessProbe:
+          initialDelaySeconds: 120
           periodSeconds: 20
           tcpSocket:
             port: 1883

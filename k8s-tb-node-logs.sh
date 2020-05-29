@@ -38,7 +38,7 @@ rm -rf tb-node-logs/*
 
 echo Waiting for tb-nodes...
 
-kubectl rollout status deployment/tb-node || { echo 'Failed to get tb-nodes deployment status. Exiting...' ; exit 1; }
+kubectl rollout status statefulset/tb-node || { echo 'Failed to get tb-nodes statefulset status. Exiting...' ; exit 1; }
 
 nodes=($(kubectl get pods | grep 'tb-node-' | awk '{print $1}'))
 
