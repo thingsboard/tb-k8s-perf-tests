@@ -61,7 +61,7 @@ spec:
       containers:
       - name: tb-performance
         imagePullPolicy: Always
-        image: thingsboard/tb-ce-performance-test:1.0.0
+        image: volodymyrbabak/tb-ce-performance-test:1.1.1
         resources:
           requests:
             cpu: "1500m"

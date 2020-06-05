@@ -246,7 +246,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-js-executor:2.5.1
+        image: volodymyrbabak/tb-js-executor:2.5.2-SNAPSHOT
         env:
         - name: REMOTE_JS_EVAL_REQUEST_TOPIC
           value: "js_eval.requests"
@@ -303,7 +303,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-node:2.5.1
+        image: volodymyrbabak/tb-node:2.5.2-SNAPSHOT
         ports:
         - containerPort: 8080
           name: http
@@ -318,6 +318,8 @@ spec:
           value: "monolith"
         - name: TB_QUEUE_TYPE
           value: "kafka"
+        - name: TB_QUEUE_KAFKA_MAX_POLL_RECORDS
+          value: "8192"
         - name: ZOOKEEPER_ENABLED
           value: "true"
         - name: ZOOKEEPER_URL
@@ -460,7 +462,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-mqtt-transport:2.5.1
+        image: volodymyrbabak/tb-mqtt-transport:2.5.2-SNAPSHOT
         ports:
         - containerPort: 1883
           name: mqtt
@@ -471,6 +473,8 @@ spec:
               fieldPath: metadata.name
         - name: TB_QUEUE_TYPE
           value: "kafka"
+        - name: TB_QUEUE_KAFKA_MAX_POLL_RECORDS
+          value: "8192"
         - name: MQTT_BIND_ADDRESS
           value: "0.0.0.0"
         - name: MQTT_BIND_PORT

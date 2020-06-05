@@ -51,7 +51,7 @@ spec:
   containers:
   - name: tb-db-setup
     imagePullPolicy: Always
-    image: thingsboard/tb-node:2.5.1
+    image: volodymyrbabak/tb-node:2.5.2-SNAPSHOT
     envFrom:
     - configMapRef:
         name: tb-node-db-config

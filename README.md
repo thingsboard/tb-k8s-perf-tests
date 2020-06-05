@@ -87,7 +87,7 @@ Execute the following command to deploy resources:
 $ ./k8s-deploy-resources.sh
 `
 
-Before running install script, please make sure that cluster is running fine.
+Before running install script, please make sure cluster is running fine.
 
 You can execute following command to download tb-node logs:
 
@@ -105,7 +105,7 @@ $ ./k8s-install-performance.sh
 
 ### API test
 
-Execute the following command to start pefrormance test for 1000000 Devices:
+Execute the following command to start performance test for 1000000 Devices:
 
 `
 $ ./k8s-run-performance-clients.sh
@@ -113,7 +113,7 @@ $ ./k8s-run-performance-clients.sh
 
 ### Test results
 
-After a while when all resources will be successfully started you can open `http://{your-cluster-ip}` in you browser (for ex. `http://192.168.99.101`).
+After a while when all resources will be successfully started you can open `http://{your-cluster-ip}` in your browser (for ex. `http://192.168.99.101`).
 You should see ThingsBoard login page.
 
 Execute the following command to get your cluster web ui host information:
