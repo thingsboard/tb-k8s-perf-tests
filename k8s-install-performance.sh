@@ -55,7 +55,7 @@ export DEVICE_END_IDX='$deviceEndIdx'; \
 export GATEWAY_START_IDX='$gatewayStartIdx'; \
 export GATEWAY_END_IDX='$gatewayEndIdx'; \
 export RULE_CHAIN_NAME=root_rule_chain_ce_random.json; \
-start-tests.sh; touch /install-finished;'
+start-tests.sh; touch /tmp/install-finished;'
 
     kubectl delete pod tb-performance-setup
 

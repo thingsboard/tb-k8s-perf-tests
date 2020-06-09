@@ -352,8 +352,6 @@ spec:
           value: "1000000"
         - name: TB_TRANSPORT_SESSIONS_INACTIVITY_TIMEOUT
           value: "86400000"
-        - name: CLUSTER_VIRTUAL_NODES_SIZE
-          value: "4096"
         - name: TB_RULE_ENGINE_STATS_ENABLED
           value: "true"
         - name: TB_RULE_ENGINE_STATS_PRINT_INTERVAL_MS
@@ -389,12 +387,14 @@ spec:
         - name: TB_QUEUE_RE_MAIN_PROCESSING_STRATEGY_TYPE
           value: "RETRY_FAILED_AND_TIMED_OUT"
         - name: TB_QUEUE_RE_MAIN_PROCESSING_STRATEGY_RETRIES
-          value: "3"
+          value: "0"
         - name: TB_QUEUE_CORE_PARTITIONS
           value: "30"
         - name: TB_QUEUE_RE_MAIN_PARTITIONS
           value: "30"
         - name: TB_QUEUE_RE_MAIN_PACK_PROCESSING_TIMEOUT_MS
+          value: "30000"
+        - name: TB_QUEUE_CORE_PACK_PROCESSING_TIMEOUT_MS
           value: "30000"
         envFrom:
         - configMapRef:
@@ -437,7 +437,7 @@ metadata:
   name: tb-mqtt-transport
   namespace: thingsboard
 spec:
-  replicas: 8
+  replicas: 20
   selector:
     matchLabels:
       app: tb-mqtt-transport
@@ -490,11 +490,15 @@ spec:
         - name: TB_TRANSPORT_SESSIONS_INACTIVITY_TIMEOUT
           value: "86400000"
         - name: TB_TRANSPORT_SESSIONS_REPORT_TIMEOUT
-          value: "300000"
+          value: "3000"
         - name: TB_QUEUE_CORE_PARTITIONS
           value: "30"
         - name: TB_QUEUE_RE_MAIN_PARTITIONS
           value: "30"
+        - name: TB_KAFKA_BATCH_SIZE
+          value: "16384"
+        - name: TB_KAFKA_LINGER_MS
+          value: "1"
         volumeMounts:
           - mountPath: /config
             name: tb-mqtt-transport-config

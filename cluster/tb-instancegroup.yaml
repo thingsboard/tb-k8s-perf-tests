@@ -70,8 +70,8 @@ metadata:
 spec:
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.large
-  maxSize: 8
-  minSize: 8
+  maxSize: 20
+  minSize: 20
   nodeLabels:
     kops.k8s.io/instancegroup: mqtt-transport
     nodeType: mqtt-transport
@@ -90,7 +90,7 @@ metadata:
   name: postgres
 spec:
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
-  machineType: m5.large
+  machineType: m5.xlarge
   maxSize: 1
   minSize: 1
   nodeLabels:

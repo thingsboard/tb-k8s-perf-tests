@@ -46,5 +46,5 @@ spec:
     envFrom:
     - configMapRef:
         name: tb-performance-config
-    command: ['sh', '-c', 'while [ ! -f /install-finished ]; do sleep 2; done;']
+    command: ['sh', '-c', 'while [ ! -f /tmp/install-finished ]; do sleep 2; done;']
   restartPolicy: Never
