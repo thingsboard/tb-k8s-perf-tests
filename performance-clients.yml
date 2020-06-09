@@ -38,7 +38,7 @@ metadata:
     app: tb-performance-run
 spec:
   serviceName: tb-performance-run
-  replicas: 20
+  replicas: 4
   podManagementPolicy: "Parallel"
   selector:
     matchLabels:

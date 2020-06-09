@@ -8,8 +8,8 @@ metadata:
 spec:
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.xlarge
-  maxSize: 15
-  minSize: 15
+  maxSize: 3
+  minSize: 3
   nodeLabels:
     kops.k8s.io/instancegroup: cassandra
     nodeType: cassandra
@@ -29,8 +29,8 @@ metadata:
 spec:
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.xlarge
-  maxSize: 3
-  minSize: 3
+  maxSize: 1
+  minSize: 1
   nodeLabels:
     kops.k8s.io/instancegroup: js-executor
     nodeType: js-executor
@@ -70,8 +70,8 @@ metadata:
 spec:
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.large
-  maxSize: 8
-  minSize: 8
+  maxSize: 4
+  minSize: 4
   nodeLabels:
     kops.k8s.io/instancegroup: mqtt-transport
     nodeType: mqtt-transport
@@ -112,8 +112,8 @@ metadata:
 spec:
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.xlarge
-  maxSize: 15
-  minSize: 15
+  maxSize: 3
+  minSize: 3
   nodeLabels:
     kops.k8s.io/instancegroup: tb-node
     nodeType: tb-node
@@ -136,8 +136,8 @@ spec:
     - net.ipv4.tcp_fin_timeout
   image: kope.io/k8s-1.15-debian-stretch-amd64-hvm-ebs-2019-09-26
   machineType: c5.large
-  maxSize: 20
-  minSize: 20
+  maxSize: 4
+  minSize: 4
   nodeLabels:
     kops.k8s.io/instancegroup: tb-performance
     nodeType: tb-performance

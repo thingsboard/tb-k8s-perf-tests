@@ -62,7 +62,7 @@ start-tests.sh; touch /install-finished;'
 }
 
 deviceStartIdx=${1:-0}
-deviceEndIdx=${2:-1000000}
+deviceEndIdx=${2:-200000}
 gatewayStartIdx=${3:-0}
 gatewayEndIdx=${4:-0}
 testApi=${5:-device}

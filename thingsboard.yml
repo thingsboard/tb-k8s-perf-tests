@@ -138,7 +138,7 @@ spec:
         - name: KAFKA_CONTROLLER_SHUTDOWN_ENABLE
           value: "true"
         - name: KAFKA_CREATE_TOPICS
-          value: "js_eval.requests:120:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb_transport.api.requests:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb_rule_engine:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120"
+          value: "js_eval.requests:60:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb_transport.api.requests:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120,tb_rule_engine:30:1:delete --config=retention.ms=600000 --config=segment.bytes=26214400 --config=retention.bytes=5368709120"
         - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
           value: "false"
         - name: KAFKA_LOG_RETENTION_BYTES
@@ -168,7 +168,7 @@ spec:
     - port: 9092
       targetPort: 9092
       name: kafka-int
-  clusterIP: None      
+  clusterIP: None
   selector:
     app: tb-kafka
 ---
@@ -230,7 +230,7 @@ metadata:
   name: tb-js-executor
   namespace: thingsboard
 spec:
-  replicas: 120
+  replicas: 30
   selector:
     matchLabels:
       app: tb-js-executor
@@ -277,7 +277,7 @@ metadata:
   namespace: thingsboard
 spec:
   serviceName: tb-node
-  replicas: 15
+  replicas: 3
   podManagementPolicy: "Parallel"
   selector:
     matchLabels:
@@ -352,8 +352,6 @@ spec:
           value: "1000000"
         - name: TB_TRANSPORT_SESSIONS_INACTIVITY_TIMEOUT
           value: "86400000"
-        - name: CLUSTER_VIRTUAL_NODES_SIZE
-          value: "4096"
         - name: TB_RULE_ENGINE_STATS_ENABLED
           value: "true"
         - name: TB_RULE_ENGINE_STATS_PRINT_INTERVAL_MS
@@ -396,6 +394,8 @@ spec:
           value: "30"
         - name: TB_QUEUE_RE_MAIN_PACK_PROCESSING_TIMEOUT_MS
           value: "30000"
+        - name: TB_QUEUE_CORE_PACK_PROCESSING_TIMEOUT_MS
+          value: "30000"
         envFrom:
         - configMapRef:
             name: tb-node-db-config
@@ -437,7 +437,7 @@ metadata:
   name: tb-mqtt-transport
   namespace: thingsboard
 spec:
-  replicas: 8
+  replicas: 4
   selector:
     matchLabels:
       app: tb-mqtt-transport
@@ -490,11 +490,15 @@ spec:
         - name: TB_TRANSPORT_SESSIONS_INACTIVITY_TIMEOUT
           value: "86400000"
         - name: TB_TRANSPORT_SESSIONS_REPORT_TIMEOUT
-          value: "300000"
+          value: "3000"
         - name: TB_QUEUE_CORE_PARTITIONS
           value: "30"
         - name: TB_QUEUE_RE_MAIN_PARTITIONS
           value: "30"
+        - name: TB_KAFKA_BATCH_SIZE
+          value: "16384"
+        - name: TB_KAFKA_LINGER_MS
+          value: "1"
         volumeMounts:
           - mountPath: /config
             name: tb-mqtt-transport-config
